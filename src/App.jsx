@@ -18,31 +18,40 @@ class App extends Component {
     let scene;
     let camera;
     let renderer;
-    let box;
+    /* let box; */
     let controls;
+    let geometry;
+    let figure;
 
-    function init() {
+    const init = () => {
       scene = new THREE.Scene();
       camera = new
       THREE.PerspectiveCamera(75, window.innerWidth
         / window.innerHeight, 0.1, 1000);
       renderer = new THREE.WebGLRenderer({ antialias: true });
       // eslint-disable-next-line no-unused-vars
-      /* const figureType = this.state.selectedFigure;
+      const figureType = this.state.selectedFigure;
       // eslint-disable-next-line no-unused-vars
-      const figures = this.state.figuresArray; */
+      const figures = this.state.figuresArray;
 
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       camera.position.setZ(30);
       document.body.appendChild(renderer.domElement);
-      const geometry = new THREE.BoxGeometry(1, 1, 1, 11);
+      if (this.state.selectedFigure === 'Box') {
+        geometry = new THREE.BoxGeometry(1, 1, 1, 11);
+      } else if (this.state.selectedFigure === 'Sphere') {
+        geometry = new THREE.SphereGeometry(15, 32, 16);
+      } else if (this.state.selectedFigure === 'Circle') {
+        geometry = new THREE.CircleGeometry(5, 32);
+      }
+
       const material
       = new THREE.MeshBasicMaterial({
         color: 0xFF6347,
       });
 
-      box = new THREE.Mesh(geometry, material);
+      figure = new THREE.Mesh(geometry, material);
 
       /* const geometryS = new THREE.SphereGeometry(2, 3, 1);
       const materialS = new THREE.MeshBasicMaterial({ color: 0x00eeee });
@@ -53,14 +62,14 @@ class App extends Component {
       const [x, y, z]
         = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(10));
 
-      box.position.set(x, y, z);
+      figure.position.set(x, y, z);
 
       light.position.set(20, 20, 20);
       const gridHelper = new THREE.GridHelper(200, 50);
 
       scene.add(light, ambientLight, gridHelper);
 
-      scene.add(box);
+      scene.add(figure);
       /* box.position
         .set(Math.random()
         * 2 + 1, Math.random() * 2 + 1, Math.random() * 2 + 1); */
@@ -70,12 +79,12 @@ class App extends Component {
       camera.position.z = 5;
 
       controls = new OrbitControls(camera, renderer.domElement);
-    }
+    };
 
     function animate() {
       requestAnimationFrame(animate);
-      box.rotation.x += 0.01;
-      box.rotation.y += 0.01;
+      figure.rotation.x += 0.01;
+      figure.rotation.y += 0.01;
       controls.update();
       renderer.render(scene, camera);
     }
@@ -151,7 +160,7 @@ class App extends Component {
             <option value="">Choose a figure</option>
             <option value="Box">Box</option>
             <option value="Sphere">Sphere</option>
-            <option value="Piramyde">Piramyde</option>
+            <option value="Circle">Circle</option>
           </select>
           <input
             name="Scale"
